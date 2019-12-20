@@ -1,6 +1,8 @@
 import tempfile
 import datetime
 
+import json
+
 from flask import request
 
 import flask_tus.responses as Response
@@ -75,10 +77,15 @@ class FlaskTus(object):
 
                 if fingerprint:
                     # Get upload
-                    upload = self.repo.find_by(fingerprint=fingerprint)
+                    upload = self.repo.find_by(metadata__fingerprint=fingerprint).first()
+                    print("fig: {}".format(fingerprint))
+                    print(upload)
+
 
                     # If an upload has matching fingerprint
                     if upload:
+
+                        print(upload.filename)
                         return post_response(upload)
 
             upload = self.repo.create(upload_length, upload_metadata)
